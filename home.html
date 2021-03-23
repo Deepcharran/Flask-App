@@ -5,12 +5,12 @@
 $(function(){
 	window.setInterval(function(){
 	loadNewDecimal()
-	), 1000)
+	}, 1000)
 
 function loadNewDecimal(){
 	$.ajax({ 
 	url:"/update_decimal",
-	type: "POST,
+	type: "POST",
 	dataType: "json",
 	success: function(data){
 	$(random_decimal).replaceWith(data)
@@ -18,11 +18,11 @@ function loadNewDecimal(){
 
 	});
 }
-});
-I
+}
+
 
 </script>
 
-<div id="random_decimal">
-{{ x }}
-</div>
+// <div id="random_decimal">
+// {{ x }}
+// </div>
