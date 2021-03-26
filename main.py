@@ -86,7 +86,8 @@ def influxdbfun():
 @application.route('/update_decimal', methods=['POST'])
 def updatedecimal():
 	routernames, results=influxdbfun()
-	return jsonify('', render_template('random_decimal_model.html', xrouterlist=routernames, ytargetrouter=results))
+	return {"x":routernames, "y":results}
+	# return jsonify('', render_template('index.html', x=routernames, y=results))
 	# return jsonify('', render_template('random_decimal_model.html', x=results))
 
 	# random_decimal=influxdbfun()
@@ -95,7 +96,8 @@ def updatedecimal():
 @application.route('/')
 def homepage ():
 	routernames, results=influxdbfun()
-	return render_template('index.html', xrouterlist=routernames, ytargetrouter=results)
+	print(routernames,results)
+	return render_template('index.html', x=routernames, y=results)
 	# return render_template('index.html', x=results)
 
 	# random_decimal=influxdbfun()
