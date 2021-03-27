@@ -17,17 +17,30 @@ text {
   font-size: 10px;
 }
 
-table {
+#tables {
     float: right;
     padding-top: 250px;
     padding-right: 50px;
     font-size: small;
+    
 }
 
+@keyframes fadein {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeout {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+
 </style>
+<div id="topologybg">
 <svg width="700" height="600"></svg>
-<!-- <svg height="600" width="250"> -->
-<table style="width:250">
+<div id="tables"></div>
+<!-- <table style="width:250">
   <tr>
     <td>Interface Name</td>
     <td>Hu0/0/0/7</td>
@@ -48,20 +61,28 @@ table {
     <td>Neighbour Interface IP</td>
     <td>192.184.163.14/30</td>
   </tr>
-</table>
+</table> -->
+<!-- {{ x }} -->
+</div>
+
+<!-- <div id="random_decimal">
+  {{ x }}
+  {{ y }}
+</div> -->
+<!-- <svg height="600" width="250"> -->
 
 <!-- </svg> -->
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
 <script>
-var routerlists, neighrouter, graph;
-d3function();
-
+var routerlists, neighrouter, graph, flag=0,tablesourcerouter="he", tabletargetrouter="she";
+console.log(graph);
 $(function(){
+	loadNewDecimal()
 	window.setInterval(function(){
 	loadNewDecimal()
-  console.log(this.routerlists, this.neighrouter, this.graph);
+  // console.log(this.routerlists, this.neighrouter, this.graph);
 	}, 30000)
 
   function loadNewDecimal(){
@@ -71,8 +92,9 @@ $(function(){
 	type: "POST",
 	dataType: "json",
 	success: function(data){
-	$(random_decimal).html(data)
-  console.log(data);
+	// $(random_decimal).html(data)
+  // console.log(data);
+  console.log("1");
   scope.routerlists=data.x;
   scope.neighrouter=data.y;
   scope.graph={
@@ -80,7 +102,8 @@ $(function(){
   "links": scope.neighrouter
 }
 // $("svg")?.remove();
-
+flag=1;
+console.log("2")
 d3function();
 // console.log(scope.routerlists, scope.neighrouter, scope.graph);
 	}
@@ -88,10 +111,14 @@ d3function();
 	});
 }
 });
+d3function();
 
 function d3function(){
   // $("svg").remove();
-
+  console.log("-2");
+  if(flag==1){
+  d3.selectAll("svg > *").remove();}
+  console.log("-1");
   var svg=  d3.select("svg")
             width = +svg.attr("width"),
             height = +svg.attr("height");
@@ -103,32 +130,6 @@ function d3function(){
       .force("charge", d3.forceManyBody())
       .force("center", d3.forceCenter(width / 2, height / 2));
 
-  //   var graph={
-  //   "nodes": [
-  //     {"id": "5508-B"},
-  //     {"id": "5508-A"},
-  //     {"id": "9906-A"},
-  //     {"id": "9906-B"},
-  //     {"id": "9904-G-LS"},
-  //     {"id": "9906-C-LS"}
-  //   ],
-  //   "links": [
-  //     {"source": "5508-B", "target": "5508-A", "value": 1},
-  //     {"source": "5508-A", "target": "9906-A", "value": 1},
-  //     {"source": "9906-B", "target": "9904-G-LS", "value": 1},
-  //     {"source": "5508-A", "target": "9904-G-LS", "value": 1},
-  //     {"source": "9904-G-LS", "target": "9906-B", "value": 1},
-  //     {"source": "9904-G-LS", "target": "9906-C-LS", "value": 1},
-  //     {"source": "9906-A", "target": "9906-B", "value": 1},
-  //     {"source": "9906-B", "target": "9906-C-LS", "value": 1}
-  //     ]
-  // }
-
-  // var graph={
-  //   "nodes": x1,
-  //   "links": y1
-  // }
-
   // d3.json("/data/miserables.json", function(error, graph) {
   //   if (error) throw error;
 
@@ -138,16 +139,36 @@ function d3function(){
       .data(this.graph?.links || [])
       .enter().append("line")
       .attr("stroke-width",1);
+      // .data(tabletargetrouter=this.graph.links);
+      console.log(graph);
         // .attr("stroke-width", function(d) { return Math.sqrt(d.value); });
 
     var node = svg.append("g")
         .attr("class", "nodes")
       .selectAll("g")
       .data(this.graph?.nodes || [])
+      // .data(tablesourcerouter=this.graph.nodes)
       .enter().append("g")
+      .on("mouseover", function(d){d3.select(this).select("circle").transition()
+      .duration(750)
+      .attr("r", 8);
+      div.html("Source Router:" + d.id + "<br/>" + "Target Router:" + "d.target.id")
+      // div.html("Source Router:" + graph.links[0].source.id.toString() + "<br/>" + "Site:" + graph.nodes[0].id.toString())
+      .style("transition-duration","2s")
+      .style("animation","fadein 2s ease-in");})
+      .on("mouseout", function(){
+        d3.select(this).select("circle").transition()
+      .duration(750)
+      .attr("r", 5);
+      div
+      .style("transition-duration","2s")
+      .style("animation","fadeout 2s ease-in");
+      });
       
+    
     var circles = node.append("circle")
         .attr("r", 5)
+        // .attr("fill","blue")
         .attr("fill", function(d) { return color(d.group); })
         .call(d3.drag()
             .on("start", dragstarted)
@@ -161,15 +182,16 @@ function d3function(){
         .attr('x', 6)
         .attr('y', 3);
 
-    node.append("title")
-        .text(function(d) { return d.id; });
+
+    // node.append("title")
+    //     .text(function(d) { return d.id; });
 
     simulation
         .nodes(this.graph?.nodes || [])
         .on("tick", ticked);
 
     simulation.force("link")
-        .links(this.graph?.links || []);
+        .links(this.graph?.links || []);    
 
     function ticked() {
       link
@@ -202,10 +224,30 @@ function d3function(){
     d.fy = null;
   }
 
+  var div=d3.select("#tables");	
+  
+  // function mouseover(data) {
+  // d3.select(this).select("circle").transition()
+  //     .duration(750)
+  //     .attr("r", 8);
+  //     div.html("Source Router:" + data.source + "<br/>" + "Target Router:" + data.target)
+  //     // div.html("Source Router:" + graph.links[0].source.id.toString() + "<br/>" + "Site:" + graph.nodes[0].id.toString())
+  //     .style("transition-duration","2s")
+  //     .style("animation","fadein 2s ease-in");
+  //     // console.log(graph.nodes[0].id);
+  //     // console.log(graph.links);
+  //   }
+
+// function mouseout() {
+//   d3.select(this).select("circle").transition()
+//       .duration(750)
+//       .attr("r", 5);
+//       div
+//       .style("transition-duration","2s")
+//       .style("animation","fadeout 2s ease-in");
+// }
+  console.log(flag);
+  
 }
 
 </script>
-<div id="random_decimal">
-  {{ x }}
-  {{ y }}
-</div>
