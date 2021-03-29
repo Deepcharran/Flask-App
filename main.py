@@ -2,10 +2,12 @@ from flask import Flask, render_template, jsonify
 from influxdb import InfluxDBClient
 
 application = Flask(__name__)
+# app.debug = True
+# app.run(host = '10.106.79.198',port=5000)
 def influxdbfun():
 	client = InfluxDBClient(host='10.106.79.198',port=8086)
 	client.switch_database('telegraf') 
-	data = client.query('SELECT "source", "neighbor_address_xr/ipv4_address" AS IP, "is_this_neighbor_us", "interface_name" FROM "Cisco-IOS-XR-ipv4-pim-oper:pim/active/default-context/neighbors/neighbor" WHERE time > now() - 30s GROUP BY "source"')
+	data = client.query('SELECT "source", "neighbor_address_xr/ipv4_address" AS IP, "is_this_neighbor_us", "interface_name" FROM "Cisco-IOS-XR-ipv4-pim-oper:pim/active/default-context/neighbors/neighbor" WHERE time > now() - 1m GROUP BY "source"')
 	routers=[]
 	routernames=[]
 	unrouternames=[]
@@ -38,7 +40,7 @@ def influxdbfun():
 		for k,v in j.items():
 			if k == 'target' and v not in routers:
 				unrouternames.append({"id": v})
-	# print("Total Numbers of Unknown Active Routers :",len(unrouternames))
+	print("Total Numbers of Unknown Active Routers :",len(unrouternames))
 	# print("Nodes(Known Routers) :",routernames)
 	# print("\n")
 	detailed_results=results
@@ -50,14 +52,10 @@ def influxdbfun():
 	# print(results)
 	ans=[]
 	for j in results:
-		if len(j)==2:
+		if len(j)==2 and not j['target'].startswith('Unidentified'):
 			ans.append(j)
 	print(ans)
 	return (routernames, ans)
-
-
-
-
 	# random_decimal_returning_var=client.query('SELECT * FROM "routers"')
 	# return random_decimal_returning_var
 

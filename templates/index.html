@@ -40,29 +40,6 @@ text {
 <div id="topologybg">
 <svg width="700" height="600"></svg>
 <div id="tables"></div>
-<!-- <table style="width:250">
-  <tr>
-    <td>Interface Name</td>
-    <td>Hu0/0/0/7</td>
-  </tr>
-  <tr>
-    <td>Interface IP</td>
-    <td>192.184.163.13/30</td>
-  </tr>
-  <tr>
-    <td>Neighbour Name</td>
-    <td>NCS-5508-A</td>
-  </tr>
-  <tr>
-    <td>Neighbour Interface Name</td>
-    <td>Hu0/1/0/31 </td>
-  </tr>
-  <tr>
-    <td>Neighbour Interface IP</td>
-    <td>192.184.163.14/30</td>
-  </tr>
-</table> -->
-<!-- {{ x }} -->
 </div>
 
 <!-- <div id="random_decimal">
@@ -119,7 +96,7 @@ function d3function(){
   for (var i = 0; i < this.graph.links.length; i++) {
   var string=this.graph.links[i].target;
   if(string.indexOf(substring)!== -1){
-    alert(string+" Check your InfluxDB");
+    alert(string+" Please check your router's status!!");
   } 
 }
   console.log("-2");
