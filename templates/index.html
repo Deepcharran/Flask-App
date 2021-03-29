@@ -77,7 +77,7 @@ text {
 
 <script>
 var routerlists, neighrouter, graph, flag=0,tablesourcerouter="he", tabletargetrouter="she";
-console.log(graph);
+
 $(function(){
 	loadNewDecimal()
 	window.setInterval(function(){
@@ -115,13 +115,13 @@ d3function();
 
 function d3function(){
   // $("svg").remove();
-//   var substring="Unidentified Router";
-//   for (var i = 0; i < this.graph.links.length; i++) {
-//   var string=this.graph.links[i].target.id;
-//   if(string.indexOf(substring)!== -1){
-//     alert(string);
-//   } 
-// }
+  var substring="Unidentified Router";
+  for (var i = 0; i < this.graph.links.length; i++) {
+  var string=this.graph.links[i].target;
+  if(string.indexOf(substring)!== -1){
+    alert(string+" Check your InfluxDB");
+  } 
+}
   console.log("-2");
   if(flag==1){
   d3.selectAll("svg > *").remove();}
