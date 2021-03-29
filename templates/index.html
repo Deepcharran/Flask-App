@@ -115,6 +115,13 @@ d3function();
 
 function d3function(){
   // $("svg").remove();
+//   var substring="Unidentified Router";
+//   for (var i = 0; i < this.graph.links.length; i++) {
+//   var string=this.graph.links[i].target.id;
+//   if(string.indexOf(substring)!== -1){
+//     alert(string);
+//   } 
+// }
   console.log("-2");
   if(flag==1){
   d3.selectAll("svg > *").remove();}
@@ -149,21 +156,25 @@ function d3function(){
       .data(this.graph?.nodes || [])
       // .data(tablesourcerouter=this.graph.nodes)
       .enter().append("g")
-      .on("mouseover", function(d){d3.select(this).select("circle").transition()
-      .duration(750)
-      .attr("r", 8);
-      div.html("Source Router:" + d.id + "<br/>" + "Target Router:" + "d.target.id")
-      // div.html("Source Router:" + graph.links[0].source.id.toString() + "<br/>" + "Site:" + graph.nodes[0].id.toString())
-      .style("transition-duration","2s")
-      .style("animation","fadein 2s ease-in");})
-      .on("mouseout", function(){
-        d3.select(this).select("circle").transition()
-      .duration(750)
-      .attr("r", 5);
-      div
-      .style("transition-duration","2s")
-      .style("animation","fadeout 2s ease-in");
-      });
+      .on("mouseover", mouseover)
+      .on("mouseout", mouseout)
+
+      // .on("mouseover", function(d){d3.select(this).select("circle").transition()
+      // .duration(750)
+      // .attr("r", 8);
+      // div.html("Source Router:" + d.id + "<br/>" + "Target Router:" + "d.target.id")
+      // // div.html("Source Router:" + graph.links[0].source.id.toString() + "<br/>" + "Site:" + graph.nodes[0].id.toString())
+      // .style("transition-duration","2s")
+      // .style("animation","fadein 2s ease-in");})
+      // .on("mouseout", function(){
+      //   d3.select(this).select("circle").transition()
+      // .duration(750)
+      // .attr("r", 5);
+      // div
+      // .style("transition-duration","2s")
+      // .style("animation","fadeout 2s ease-in");
+      // })
+      ;
       
     
     var circles = node.append("circle")
@@ -225,7 +236,37 @@ function d3function(){
   }
 
   var div=d3.select("#tables");	
+ function mouseover(d){ 
+  // d3.selectAll("node")
+  // console.log(d)
+  // console.log(graph.links)
+  d3.select(this).select("circle").transition()
+      .duration(750)
+      .attr("r", 8)
+  // .data(graph.links)
+      ;
+      var i,tr;
+for (i = 0; i < graph.links.length; i++) {
+  // console.log(graph.links[i].source.id)
+  if(d.id==graph.links[i].source.id){
+  tr=graph.links[i].target.id}
   
+}
+      div.html("Source Router:" + d.id + "<br/>" + "Target Router:" + tr)
+      // div.html("Source Router:" + graph.links[0].source.id.toString() + "<br/>" + "Site:" + graph.nodes[0].id.toString())
+      .style("transition-duration","2s")
+      .style("animation","fadein 2s ease-in");
+ }
+ function mouseout(){
+    // d3.selectAll("node")
+        d3.select(this).select("circle").transition()
+      .duration(750)
+      .attr("r", 5);
+      div
+      .style("transition-duration","2s")
+      .style("animation","fadeout 2s ease-in forwards");
+      
+    }
   // function mouseover(data) {
   // d3.select(this).select("circle").transition()
   //     .duration(750)
